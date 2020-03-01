@@ -11,20 +11,23 @@
 # ssh credentials (test user):
 #   user@password 
 
-FROM ubuntu:18.04
+FROM fedora:latest
 
-RUN apt-get update \
-  && apt-get install -y ssh \
-      build-essential \
+RUN dnf update \
+  && dnf install -y ssh \
+      boost-devel \
+      cpprest-devel \
+     # gtest \
       gcc \
       g++ \
+     # llvm \
       gdb \
       clang \
       cmake \
       rsync \
       tar \
       python \
-  && apt-get clean
+  && dnf clean
 
 RUN ( \
     echo 'LogLevel DEBUG2'; \
@@ -34,7 +37,7 @@ RUN ( \
   ) > /etc/ssh/sshd_config_test_clion \
   && mkdir /run/sshd
 
-RUN useradd -m user \
-  && yes password | passwd user
+RUN useradd -m patryk \
+  && yes password | passwd 381800
 
 CMD ["/usr/sbin/sshd", "-D", "-e", "-f", "/etc/ssh/sshd_config_test_clion"]
